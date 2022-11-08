@@ -1,3 +1,3 @@
-import ModalComponent from './components/ModalComponent';
+import ModalButtonComponent from './components/ModalButtonComponent';
 
-export default ModalComponent;
+export default ModalButtonComponent;

@@ -1,9 +1,5 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
@@ -11,6 +7,7 @@ import Dialog from '@mui/material/Dialog';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import './modal.css';
 
 const options = [
   'None',
@@ -29,16 +26,26 @@ const options = [
   'Umbriel',
 ];
 
-interface ConfirmationDialogRawProps {
-  id: string;
+interface ModalProps {
   keepMounted: boolean;
   value: string;
   open: boolean;
+  title: string;
+  items: string[];
   onClose: (value?: string) => void;
 }
 
-function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
-  const { onClose, value: valueProp, open, ...other } = props;
+interface ButtonProps {
+  primary?: boolean;
+  buttonLabel: string;
+  items: string[];
+  title: string;
+  backgroundColor?: string;
+}
+
+const ModalComponent = (props: ModalProps) => {
+  const { onClose, value: valueProp, open, title, items, ...other } = props;
+  console.log('items: ', items);
   const [value, setValue] = React.useState(valueProp);
   const radioGroupRef = React.useRef<HTMLElement>(null);
 
@@ -74,7 +81,7 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
       open={open}
       {...other}
     >
-      <DialogTitle>Phone Ringtone</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent dividers>
         <RadioGroup
           ref={radioGroupRef}
@@ -83,7 +90,7 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
           value={value}
           onChange={handleChange}
         >
-          {options.map((option) => (
+          {items.map((option) => (
             <FormControlLabel
               value={option}
               key={option}
@@ -104,11 +111,18 @@ function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
 }
 
 
-const ModalComponent = ({}) => {
+const ModalButtonComponent = ({
+  primary = false,
+  buttonLabel,
+  items = ['opcion 1', 'opcion 2'],
+  title,
+  backgroundColor = 'lightblue',
+  ...props
+}: ButtonProps) => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('Dione');
 
-  const handleClickListItem = () => {
+  const openModal = () => {
     setOpen(true);
   };
 
@@ -119,36 +133,28 @@ const ModalComponent = ({}) => {
       setValue(newValue);
     }
   };
-
+  const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
   return (
-    <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      <List component="div" role="group">
-        <ListItem button divider disabled>
-          <ListItemText primary="Interruptions" />
-        </ListItem>
-        <ListItem
-          button
-          divider
-          aria-haspopup="true"
-          aria-controls="ringtone-menu"
-          aria-label="phone ringtone"
-          onClick={handleClickListItem}
-        >
-          <ListItemText primary="Phone ringtone" secondary={value} />
-        </ListItem>
-        <ListItem button divider disabled>
-          <ListItemText primary="Default notification ringtone" secondary="Tethys" />
-        </ListItem>
-        <ConfirmationDialogRaw
-          id="ringtone-menu"
-          keepMounted
-          open={open}
-          onClose={handleClose}
-          value={value}
-        />
-      </List>
-    </Box>
+    <div>
+      <button
+      type="button"
+      style={{ backgroundColor }}
+      className={['storybook-button', `storybook-button--large`, mode].join(' ')}
+      {...props}
+      onClick={openModal}
+    >
+      {buttonLabel}
+    </button>
+    <ModalComponent
+      keepMounted
+      open={open}
+      title={title}
+      items={items}
+      onClose={handleClose}
+      value={value}
+    />
+    </div>
   );
 }
 
-export default ModalComponent;
+export default ModalButtonComponent;

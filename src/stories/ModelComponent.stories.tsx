@@ -1,23 +1,25 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import ModalComponent from '../components/ModalComponent';
+import ModalButtonComponent from '../components/ModalButtonComponent';
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/ModalComponent',
-  component: ModalComponent,
+  title: 'Example/ModalButtonComponent',
+  component: ModalButtonComponent,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} as ComponentMeta<typeof ModalComponent>;
+} as ComponentMeta<typeof ModalButtonComponent>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof ModalComponent> = (args) => <ModalComponent {...args} />;
+const Template: ComponentStory<typeof ModalButtonComponent> = (args) => <ModalButtonComponent {...args} />;
 
 export const Simple = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Simple.args = {
-  label: 'Simple',
+  buttonLabel: 'Abrir modal',
+  items: ['opcion 1', 'opcion 2'],
+  title: 'Titulo modal'
 };
